@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS `newbbdd` DEFAULT CHARACTER SET utf8 ;
 USE `newbbdd` ;
 
 CREATE TABLE IF NOT EXISTS `newbbdd`.`movies` (
-  `movie_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `movies_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `title` VARCHAR(100) NOT NULL,
   `year` INT NOT NULL,
   `image_url` VARCHAR(255) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `newbbdd`.`movies` (
  );
  
 CREATE TABLE IF NOT EXISTS `newbbdd`.`directors` (
-  `director_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `directors_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `director_name` VARCHAR(45) NOT NULL UNIQUE,
   `about` TEXT
   );
@@ -41,45 +41,45 @@ CREATE TABLE IF NOT EXISTS `newbbdd`.`movies_directors` (
   INDEX `fk_movies_id1_idx` (`movies_id` ASC) VISIBLE,
   CONSTRAINT `fk_directors_id1`
     FOREIGN KEY (`directors_id`)
-    REFERENCES `newbbdd`.`directors` (`director_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `newbbdd`.`directors` (`directors_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     CONSTRAINT `fk_movies_id1`
     FOREIGN KEY (`movies_id`)
-    REFERENCES `newbbdd`.`movies` (`movie_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    REFERENCES `newbbdd`.`movies` (`movies_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS `newbbdd`.`movies_stars` (
   `movies_id` INT NOT NULL,
    `stars_id` INT NOT NULL,
   PRIMARY KEY (`movies_id`, `stars_id`),
   INDEX `fk_stars_id1_idx` (`stars_id` ASC) VISIBLE,
-  INDEX `fk_movies_id1_idx` (`movies_id` ASC) VISIBLE,
+  INDEX `fk_movies_id2_idx` (`movies_id` ASC) VISIBLE,
   CONSTRAINT `fk_stars_id1`
     FOREIGN KEY (`stars_id`)
     REFERENCES `newbbdd`.`stars` (`stars_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_movies_id1`
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_movies_id2`
     FOREIGN KEY (`movies_id`)
-    REFERENCES `newbbdd`.`movies` (`movie_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    REFERENCES `newbbdd`.`movies` (`movies_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS `newbbdd`.`movies_genres` (
   `movies_id` INT NOT NULL,
    `genres_id` INT NOT NULL,
   PRIMARY KEY (`movies_id`, `genres_id`),
   INDEX `fk_genres_id1_idx` (`genres_id` ASC) VISIBLE,
-  INDEX `fk_movies_id1_idx` (`movies_id` ASC) VISIBLE,
+  INDEX `fk_movies_id3_idx` (`movies_id` ASC) VISIBLE,
   CONSTRAINT `fk_genres_id1`
     FOREIGN KEY (`genres_id`)
     REFERENCES `newbbdd`.`genres` (`genres_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_movies_id1`
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_movies_id3`
     FOREIGN KEY (`movies_id`)
-    REFERENCES `newbbdd`.`movies` (`movie_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    REFERENCES `newbbdd`.`movies` (`movies_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
