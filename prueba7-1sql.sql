@@ -71,12 +71,71 @@ SELECT t1.title, t3.name FROM db_movies.movies t1 JOIN db_movies.movies_stars t2
 # 31. Muestra de todas las películas los géneros a los que pertenecen
 SELECT t1.title, t3.name FROM db_movies.movies t1 JOIN db_movies.movies_genres t2 ON t1.id=t2.movies_id JOIN db_movies.genres t3 ON t2.genres_id=t3.id;
 # 32. Muestra el título de la película, el director y los géneros a los que pertenecen las películas.
-SELECT t1.title AS TITULO, t7.name AS GENRE, t5.name AS ACTOR, t3.name AS DIRECTOR FROM db_movies.movies t1 JOIN db_movies.movies_directors t2 ON t1.id=t2.movies_id JOIN db_movies.directors t3 ON t2.directors_id=t3.id
+SELECT t1.title AS TITULO, t7.name AS GENERO, t5.name AS ACTOR, t3.name AS DIRECTOR FROM db_movies.movies t1 JOIN db_movies.movies_directors t2 ON t1.id=t2.movies_id JOIN db_movies.directors t3 ON t2.directors_id=t3.id
 JOIN db_movies.movies_stars t4 ON t1.id=t4.movies_id JOIN db_movies.stars t5 ON t4.stars_id=t5.id 
 JOIN db_movies.movies_genres t6 ON t1.id=t6.movies_id JOIN db_movies.genres t7 ON t6.genres_id=t7.id;
 # 33. Muestra un listado con todas las películas junto a la suma de los géneros que tiene dicha película.
 SELECT t1.title, t3.name FROM db_movies.movies t1 JOIN db_movies.movies_genres t2 ON t1.id=t2.movies_id JOIN db_movies.genres t3 ON t2.genres_id=t3.id;
-SELECT COUNT(name) FROM db_movies.movies_genres GROUP BY movies_id IN( SELECT id FROM db_movies.movies);
+ SELECT t2.title, COUNT(t1.genres_id) AS GENRES FROM db_movies.movies_genres t1 JOIN db_movies.movies t2 ON t1.movies_id=t2.id GROUP BY t1.movies_id;
 # 34. Muestra el nombre del director y la cantidad de películas tiene grabadas cada director.
+ SELECT t2.name, COUNT(t1.directors_id) AS PELICULAS FROM db_movies.movies_directors t1 JOIN db_movies.directors t2 ON t1.directors_id=t2.id GROUP BY t1.directors_id;
 # 35. Muestra la película junto a la valoración en nota (menos de 5 insuficiente, de 5 a 6 bien, etc). Además, si la nota no va del 0
+SELECT 
+    title AS TITLE,
+    imdb_rating,
+    CASE
+        WHEN imdb_rating < 5 THEN 'INSUFICIENTE'
+		WHEN imdb_rating BETWEEN 5 AND 5.9 THEN 'SUFICIENTE'
+        WHEN imdb_rating BETWEEN 6 AND 6.9 THEN 'BIEN'
+        WHEN imdb_rating BETWEEN 7 AND 8 THEN 'NOTABLE'
+        WHEN imdb_rating BETWEEN 8.1 AND 10 THEN 'EXELENTE'
+        ELSE 'ERROR'
+    END AS NOTA_PELICULA
+FROM db_movies.movies;
 # 36. En nuestras situaciones no tenemos casos de películas que tengan una nota entre 0 y 5, una nota de 12 para testear el ELSE, etc. Asi que actualiza algún caso y añade algún otro
+INSERT INTO 
+	movies (id, title, year, image_url, certificate, runtime, imdb_rating, description, metascore, votes, gross) 
+VALUES
+	(NULL, 'Inmune', 2020, 'https://www.imdb.com/title/tt12592252/mediaviewer/rm1652082945/?ref_=tt_ov_i', 'NO', 1, 4.8, 'En 2022, una pandemia devora las ciudades del mundo. Un puñado de gente navega los obstáculos que dificultan la vida: la enfermedad, la ley marcial, la cuarentena y los vigilantes.', 27, 11000, 1);
+
+INSERT INTO 
+	directors (id, name, about) 
+VALUES
+	(NULL, 'Adam Mason', 'Adam Mason conocido por su papel en Blood River (2009), Inmune (2020) y The Devil\'s Chair (2007).');
+	
+INSERT INTO 
+	movies_directors(movies_id, directors_id)
+VALUES
+	(10, 8);
+    
+INSERT INTO
+	stars(id, name, about)
+VALUES
+	(NULL, 'K.J. Apa', 'K.J. Apa nació el 17 de junio de 1997 en Auckland, Nueva Zelanda. Es un actor y productor, conocido por Riverdale (2017), El odio que das (2018) y Nuestro último verano (2019).'),
+	(NULL, 'Sofia Carson', 'Sofia Carson nació el 10 de abril de 1993 en Fort Lauderdale, Florida, Estados Unidos. Es una actriz y compositora, conocida por Corazones malheridos (2022), Los descendientes (2015) y Los descendientes 2 (2017).'),
+	(NULL, 'Craig Robinson', 'Craig Robinson nació el 25 de octubre de 1971 en Chicago, Illinois, Estados Unidos. Es un actor y productor, conocido por Juerga hasta el fin (2013), Jacuzzi al pasado (2010) y Jacuzzi al pasado 2 (2015).');
+
+INSERT INTO
+	movies_stars(movies_id, stars_id)
+VALUES
+	(10, 26), (10, 27), (10, 28);
+    
+INSERT INTO 
+	movies_genres(movies_id, genres_id)
+VALUES 
+	(10, 2), (10, 4), (10, 8);
+    
+UPDATE db_movies.movies SET imdb_rating='12' WHERE title='Pulp Fiction';
+
+SELECT 
+    title AS TITLE,
+    imdb_rating,
+    CASE
+        WHEN imdb_rating < 5 THEN 'INSUFICIENTE'
+		WHEN imdb_rating BETWEEN 5 AND 5.9 THEN 'SUFICIENTE'
+        WHEN imdb_rating BETWEEN 6 AND 6.9 THEN 'BIEN'
+        WHEN imdb_rating BETWEEN 7 AND 8 THEN 'NOTABLE'
+        WHEN imdb_rating BETWEEN 8.1 AND 10 THEN 'EXELENTE'
+        ELSE 'ERROR'
+    END AS NOTA_PELICULA
+FROM db_movies.movies;

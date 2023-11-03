@@ -142,7 +142,7 @@ VALUES
 INSERT INTO 
 	movies_genres(movies_id, genres_id)
 VALUES 
-	(1, 1), (1, 2), (2, 3), (2, 2), (2, 4), (3, 5), (3, 1), (3, 2), (4, 2), (4, 6), (5, 3), (5, 7), (5, 8);
+	(1, 1), (1, 2), (1, 3), (2, 2), (2, 4), (3, 5), (3, 1), (3, 2), (4, 2), (4, 6), (5, 3), (5, 7), (5, 8);
 
 # Mostrando todos los campos de las tablas
 SELECT * FROM movies;
